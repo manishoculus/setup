@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/usr/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="notice" version="1.0">
+ 
+<clients>
+    <client host="localhost" weight="1" cpu="10" maxusers="40000">
+      <ip value="192.168.122.2"/>
+    </client>
+    <client host="loadnode1" weight="1" cpu="9" maxusers="40000">
+      <ip value="192.168.122.2"/>
+    </client>
+    <client host="loadnode2" weight="1" maxusers="40000" cpu="8">
+      <ip value="192.168.122.3"/>
+    </client>
+    <client host="loadnode3" weight="1" maxusers="40000" cpu="9">
+      <ip value="192.168.122.21"/>
+    </client>
+    <client host="loadnode4" weight="1" maxusers="40000" cpu="9">
+      <ip value="192.168.122.11"/>
+    </client>
+    <client host="loadnode5" weight="1" maxusers="40000" cpu="9">
+      <ip value="192.168.122.12"/>
+    </client>
+    <client host="loadnode6" weight="1" maxusers="40000" cpu="9">
+      <ip value="192.168.122.13"/>
+    </client>
+    <client host="loadnode7" weight="1" maxusers="40000" cpu="9">
+      <ip value="192.168.122.14"/>
+    </client>
+  </clients>
+ 
+  <servers>
+    <server host="192.168.122.10" port="80" type="tcp"/>
+  </servers>
+ 
+  <load>
+   <arrivalphase phase="1" duration="10" unit="minute">
+   <users maxnumber="15000" arrivalrate="8" unit="second"/>
+  </arrivalphase>
+ 
+   <arrivalphase phase="2" duration="10" unit="minute">
+   <users maxnumber="15000" arrivalrate="8" unit="second"/>
+  </arrivalphase>
+ 
+   <arrivalphase phase="3" duration="30" unit="minute">
+   <users maxnumber="20000" arrivalrate="3" unit="second"/>
+  </arrivalphase>
+ 
+ </load>
+ 
+ <sessions>
+   <session probability="100" name="ab" type="ts_http">
+       <for from="1" to="10000000" var="i">
+            <request> <http url="/test.txt" method="GET" version="1.1"/> </request>
+      </for>
+  </session>
+ </sessions>
+</tsung>
