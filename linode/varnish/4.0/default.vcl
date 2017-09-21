@@ -15,7 +15,14 @@ backend default {
 acl purge {
   "localhost";
   "127.0.0.1";
- # SERVER IP ADDRESS
+}
+
+acl Blacklist {
+
+}
+
+acl Whitelist {
+ 
 }
 
 #THE RECV FUNCTION
@@ -35,10 +42,11 @@ set req.http.X-Actual-IP = regsub(req.http.X-Forwarded-For, "[, ].*$", "");
     }
   }
   
-  # Disable "xmlrpc.php" request
-    if (req.url ~ "^/xmlrpc\.php") {
+  #Disable "xmlrpc.php" request
+    if ((req.url ~ "^/xmlrpc\.php" && !(client.ip ~ Whitelist)) || (client.ip ~ Blacklist)) {
         return(synth(750, "Moved Temporarily"));
     }
+
 
  # Purge request check sections for hash_always_miss, purge and ban
  # BLOCK IF NOT IP is not in purge acl
@@ -73,6 +81,21 @@ if (req.method == "BAN") {
         # request won't go to the backend.
         return(synth(200, "Ban added"));
 }
+
+# clear cache for post update-delete
+if( req.url ~ "^/clearcache" ) {
+	if( req.url ~ "uri=" ) {
+	 ban( "req.url ~ ^/" + regsub( req.url, ".*uri=", "") );
+	 ban( "req.http.host == "+req.http.host+" && req.url ~ ^/$");
+	 ban( "req.http.host == "+req.http.host+" && req.url ~ ^/category");
+	}    # for example /clearcache?uri=foo/bar
+
+	if( req.url ~ "singlefile=" ) {
+	 ban( "req.url ~ ^/" + regsub( req.url, ".*singlefile=", "") );
+	}
+
+	 return(synth(200, "Ban added"));    
+  }
 
 # Unset cloudflare cookies
 # Remove has_js and CloudFlare/Google Analytics __* cookies.

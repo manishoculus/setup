@@ -1,6 +1,11 @@
 #!/bin/sh
 #var siteName;
 if [ -z "$1" ]; then siteName="testsite.com"; else siteName=$1; fi 
+if [ -z "$2" ]; then dbName="wordpress"; else dbName=$2; fi 
+if [ -z "$3" ]; then dbUser="admin"; else dbUser=$3; fi 
+if [ -z "$4" ]; then dbPass="#P@$$w0rd#db"; else dbPass=$4; fi 
+if [ -z "$5" ]; then ftpUser="ftpUser"; else ftpUser=$5; fi 
+if [ -z "$6" ]; then ftpPass="ftpPass"; else ftpPass=$6; fi 
 
 # set the debian sources
 echo "deb http://packages.dotdeb.org wheezy-php55 all" >> /etc/apt/sources.list
@@ -28,9 +33,9 @@ apt-get -y install vsftpd
 # Nginx configuration
 # Get the configured nginx.conf and replace the nginx.conf
 # ==============================================================
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/nginx/vps-nginx.conf
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/nginx/app.conf
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/nginx/default-sites-available.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/nginx/vps-nginx.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/nginx/app.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/nginx/default-sites-available.conf
 sed -i "s/DOMAIN/$siteName/g" vps-nginx.conf 
 sed -i "s/DOMAIN/$siteName/g" app.conf 
 sed -i "s/DOMAIN/$siteName/g" default-sites-available.conf 
@@ -46,8 +51,8 @@ mv default-sites-available.conf /etc/nginx/sites-available/default
 # ==============================================================
 # php5-fpm configuration
 # ==============================================================
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/php5-fpm/fpm-app.conf
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/php5-fpm/apc.ini
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php5-fpm/fpm-app.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php5-fpm/apc.ini
 sed -i "s/DOMAIN/$siteName/g" fpm-app.conf 
 mv fpm-app.conf /etc/php5/fpm/pool.d/$siteName.conf
 mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.tmp
@@ -58,8 +63,8 @@ mv apc.ini /etc/php5/fpm/conf.d
 # Varnish configuration
 # Get the configured wordpress.vcl and replace the default.vcl
 # ==============================================================
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/varnish/4.0/default.vcl
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/varnish/varnish.txt
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/4.0/default.vcl
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish.txt
 mv /etc/varnish/default.vcl /etc/varnish/default.vcl.orig
 mv wordpress.vcl /etc/varnish/default.vcl
 
@@ -77,29 +82,30 @@ mkdir -p /var/www/$siteName/logs
 wget http://wordpress.org/latest.tar.gz
 tar -zxvf latest.tar.gz
 mv wordpress/* /var/www/$siteName
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/wordpress/wp-config.php
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/wordpress/wp-config.php
 curl -sS https://api.wordpress.org/secret-key/1.1/salt/ >> wp-config.php
 echo "require_once(ABSPATH . 'wp-settings.php');" >> wp-config.php
 mv wp-config.php /var/www/$siteName
 rm latest.tar.gz
 rm -rf wordpress
 
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/wordpress/vsftpd.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/wordpress/vsftpd.conf
 mv vsftpd.conf /etc/
-useradd ray --home /var/www/$siteName
-echo -e "pass\npass" | passwd ray
-echo "ray" >> /etc/vsftpd.chroot_list
-chown -R ray /var/www/$siteName
+useradd ftpUser --home /var/www/$siteName
+echo -e "pass\n$ftpPass" | passwd ftpUser
+echo "$ftpUser" >> /etc/vsftpd.chroot_list
+chown -R ftpUser /var/www/$siteName
 # set up mysql db for wordpress
-echo "CREATE DATABASE IF NOT EXISTS wordpress;GRANT ALL PRIVILEGES ON wordpress.* TO admin@localhost IDENTIFIED BY 'pass' WITH GRANT OPTION;FLUSH PRIVILEGES;" | mysql -u root
+dbscript="CREATE DATABASE IF NOT EXISTS wordpress;GRANT ALL PRIVILEGES ON $dbName.* TO $dbUser@localhost IDENTIFIED BY '$dbPass' WITH GRANT OPTION;FLUSH PRIVILEGES;"
+echo $dbscript | mysql -u root
 
 
 # ==============================================================
 #set up logging (nginx and varnish)
 # ==============================================================
 #set up logrotate
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/nginx/nginx-logrotate.conf
-wget https://raw.githubusercontent.com/rayhon/c100k/master/php-web/varnish/varnish-logrotate.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/nginx/nginx-logrotate.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish-logrotate.conf
 sed -i "s/DOMAIN/$siteName/g" nginx-logrotate.conf 
 sed -i "s/DOMAIN/$siteName/g" varnish-logrotate.conf 
 mv nginx-logrotate.conf /etc/logrotate.d/nginx
