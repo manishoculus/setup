@@ -8,8 +8,8 @@ if [ -z "$5" ]; then ftpUser="ftpUser"; else ftpUser=$5; fi
 if [ -z "$6" ]; then ftpPass="ftpPass"; else ftpPass=$6; fi 
 
 # set the debian sources
-echo "deb http://packages.dotdeb.org wheezy-php55 all" >> /etc/apt/sources.list
-echo "deb-src http://packages.dotdeb.org wheezy-php55 all" >> /etc/apt/sources.list
+echo "deb http://packages.dotdeb.org stretch all" >> /etc/apt/sources.list
+echo "deb-src http://packages.dotdeb.org stretch all" >> /etc/apt/sources.list
 curl http://repo.varnish-cache.org/debian/GPG-key.txt | apt-key add -
 echo "deb http://repo.varnish-cache.org/debian/ wheezy varnish-4.0" >> /etc/apt/sources.list
 wget http://www.dotdeb.org/dotdeb.gpg
@@ -84,6 +84,9 @@ tar -zxvf latest.tar.gz
 mv wordpress/* /var/www/$siteName
 wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/wordpress/wp-config.php
 curl -sS https://api.wordpress.org/secret-key/1.1/salt/ >> wp-config.php
+sed -i "s/DBNAME/$dbName/g" wp-config.php
+sed -i "s/DBUSER/$dbUser/g" wp-config.php
+sed -i "s/DBPASS/$dbPass/g" wp-config.php
 echo "require_once(ABSPATH . 'wp-settings.php');" >> wp-config.php
 mv wp-config.php /var/www/$siteName
 rm latest.tar.gz
