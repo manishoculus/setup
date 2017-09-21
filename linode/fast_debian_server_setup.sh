@@ -96,7 +96,7 @@ echo -e "pass\n$ftpPass" | passwd ftpUser
 echo "$ftpUser" >> /etc/vsftpd.chroot_list
 chown -R ftpUser /var/www/$siteName
 # set up mysql db for wordpress
-dbscript="CREATE DATABASE IF NOT EXISTS wordpress;GRANT ALL PRIVILEGES ON $dbName.* TO $dbUser@localhost IDENTIFIED BY '$dbPass' WITH GRANT OPTION;FLUSH PRIVILEGES;"
+dbscript="CREATE DATABASE IF NOT EXISTS $dbName;GRANT ALL PRIVILEGES ON $dbName.* TO $dbUser@localhost IDENTIFIED BY '$dbPass' WITH GRANT OPTION;FLUSH PRIVILEGES;"
 echo $dbscript | mysql -u root
 
 
