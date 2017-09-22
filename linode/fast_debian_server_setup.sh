@@ -19,7 +19,6 @@ cat dotdeb.gpg | sudo apt-key add -
 apt-get -y update
 apt-get -y upgrade
 
-#apt-get -y install php5 php5-fpm php-pear php5-common php5-mcrypt php5-mysql php5-cli php5-gd php-apc
 apt-get -y install php7.0 php7.0-fpm php-pear php7.0-common php7.0-mcrypt php7.0-mysql php7.0-cli php7.0-gd curl libcurl3 libcurl3-dev php7.0-curl
 apt-get -y install nginx
 #apt-get -y install redis-server
@@ -49,7 +48,7 @@ mv default-sites-available.conf /etc/nginx/sites-available/default
 
 
 # ==============================================================
-# php5-fpm configuration
+# php7.0-fpm configuration
 # ==============================================================
 wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-0-fpm/fpm-app.conf
 wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-0-fpm/apc.ini
@@ -114,11 +113,11 @@ sed -i "s/DOMAIN/$siteName/g" varnish-logrotate.conf
 mv nginx-logrotate.conf /etc/logrotate.d/nginx
 mv varnish-logrotate.conf /etc/logrotate.d/varnish
 
-echo "/etc/init.d/php5-fpm restart" >> /etc/rc.local
+echo "/etc/init.d/php-fpm restart" >> /etc/rc.local
 echo "/etc/init.d/nginx restart" >> /etc/rc.local
 echo "/etc/init.d/varnish restart" >> /etc/rc.local
 echo "varnishncsa -a -w /var/www/$siteName/logs/varnish-access.log -D -P /var/run/varnishncsa.pid" >> /etc/rc.local
-/etc/init.d/php5-fpm restart
+/etc/init.d/php-fpm restart
 /etc/init.d/nginx restart
 /etc/init.d/varnish restart
 /etc/init.d/vsftpd restart
