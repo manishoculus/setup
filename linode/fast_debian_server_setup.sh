@@ -127,9 +127,5 @@ echo "varnishncsa -a -w /var/www/$siteName/logs/varnish-access.log -D -P /var/ru
 /etc/init.d/varnish restart
 /etc/init.d/vsftpd restart
 
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish.service
-mv 
-systemctl 
-
 #start varnish logging:
 varnishncsa -a -w /var/www/$siteName/logs/varnish-access.log -D -P /var/run/varnishncsa.pid
