@@ -65,7 +65,7 @@ mv apc.ini /etc/php/7.0/fpm/conf.d
 wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/5.1/default.vcl
 wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish.txt
 mv /etc/varnish/default.vcl /etc/varnish/default.vcl.orig
-mv wordpress.vcl /etc/varnish/default.vcl
+mv default.vcl /etc/varnish/default.vcl
 
 mv /etc/default/varnish /etc/default/varnish.orig
 mv varnish.txt /etc/default/varnish
