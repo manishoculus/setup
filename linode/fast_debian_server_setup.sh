@@ -11,7 +11,7 @@ if [ -z "$6" ]; then ftpPass="ftpPass"; else ftpPass=$6; fi
 echo "deb http://packages.dotdeb.org stretch all" >> /etc/apt/sources.list
 echo "deb-src http://packages.dotdeb.org stretch all" >> /etc/apt/sources.list
 curl http://repo.varnish-cache.org/debian/GPG-key.txt | apt-key add -
-echo "deb http://repo.varnish-cache.org/debian/ wheezy varnish-4.0" >> /etc/apt/sources.list
+echo "deb https://packagecloud.io/varnishcache/varnish5/debian/ stretch main" >> /etc/apt/sources.list
 wget http://www.dotdeb.org/dotdeb.gpg
 cat dotdeb.gpg | sudo apt-key add -
 
@@ -20,7 +20,7 @@ apt-get -y update
 apt-get -y upgrade
 
 #apt-get -y install php5 php5-fpm php-pear php5-common php5-mcrypt php5-mysql php5-cli php5-gd php-apc
-apt-get -y install php5 php5-fpm php-pear php5-common php5-mcrypt php5-mysql php5-cli php5-gd curl libcurl3 libcurl3-dev php5-curl
+apt-get -y install php7.0 php7.0-fpm php-pear php7.0-common php7.0-mcrypt php7.0-mysql php7.0-cli php7.0-gd curl libcurl3 libcurl3-dev php7.0-curl
 apt-get -y install nginx
 #apt-get -y install redis-server
 export DEBIAN_FRONTEND=noninteractive
@@ -51,19 +51,19 @@ mv default-sites-available.conf /etc/nginx/sites-available/default
 # ==============================================================
 # php5-fpm configuration
 # ==============================================================
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php5-fpm/fpm-app.conf
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php5-fpm/apc.ini
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-0-fpm/fpm-app.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-0-fpm/apc.ini
 sed -i "s/DOMAIN/$siteName/g" fpm-app.conf 
-mv fpm-app.conf /etc/php5/fpm/pool.d/$siteName.conf
-mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.tmp
-mv apc.ini /etc/php5/fpm/conf.d
+mv fpm-app.conf /etc/php/7.0/fpm/pool.d/$siteName.conf
+mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.tmp
+mv apc.ini /etc/php/7.0/fpm/conf.d
 
 
 # ==============================================================
 # Varnish configuration
 # Get the configured wordpress.vcl and replace the default.vcl
 # ==============================================================
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/4.0/default.vcl
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/5.1/default.vcl
 wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish.txt
 mv /etc/varnish/default.vcl /etc/varnish/default.vcl.orig
 mv wordpress.vcl /etc/varnish/default.vcl
