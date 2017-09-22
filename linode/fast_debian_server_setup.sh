@@ -70,6 +70,11 @@ mv default.vcl /etc/varnish/default.vcl
 mv /etc/default/varnish /etc/default/varnish.orig
 mv varnish.txt /etc/default/varnish
 
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish.service
+rm /lib/systemd/system/varnish.service 
+mv varnish.service /lib/systemd/system/varnish.service 
+systemctl daemon-reload
+systemctl restart varnish.service
 
 # ==============================================================
 # Wordpress Installation
@@ -122,6 +127,9 @@ echo "varnishncsa -a -w /var/www/$siteName/logs/varnish-access.log -D -P /var/ru
 /etc/init.d/varnish restart
 /etc/init.d/vsftpd restart
 
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/varnish/varnish.service
+mv 
+systemctl 
 
 #start varnish logging:
 varnishncsa -a -w /var/www/$siteName/logs/varnish-access.log -D -P /var/run/varnishncsa.pid
