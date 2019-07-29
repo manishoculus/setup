@@ -19,7 +19,7 @@ cat dotdeb.gpg | sudo apt-key add -
 apt-get -y update
 apt-get -y upgrade
 
-apt-get -y install php7.3 php7.3-fpm php-pear php7.3-common php7.3-mysql php7.3-cli php7.3-gd curl libcurl4 libcurl4-dev php7.3-curl
+apt-get -y install php7.3 php7.3-fpm php-pear php7.3-common php7.3-mysql php7.3-cli php7.3-gd curl libcurl4 libcurl4-openssl-dev php7.3-curl
 apt-get -y install nginx
 #apt-get -y install redis-server
 export DEBIAN_FRONTEND=noninteractive
