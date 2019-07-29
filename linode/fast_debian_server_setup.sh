@@ -19,7 +19,7 @@ cat dotdeb.gpg | sudo apt-key add -
 apt-get -y update
 apt-get -y upgrade
 
-apt-get -y install php7.0 php7.0-fpm php-pear php7.0-common php7.0-mcrypt php7.0-mysql php7.0-cli php7.0-gd curl libcurl3 libcurl3-dev php7.0-curl
+apt-get -y install php7.3 php7.3-fpm php-pear php7.3-common php7.3-mysql php7.3-cli php7.3-gd curl libcurl4 libcurl4-dev php7.3-curl
 apt-get -y install nginx
 #apt-get -y install redis-server
 export DEBIAN_FRONTEND=noninteractive
@@ -48,10 +48,10 @@ mv default-sites-available.conf /etc/nginx/sites-available/default
 
 
 # ==============================================================
-# php7.0-fpm configuration
+# php7.3-fpm configuration
 # ==============================================================
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-0-fpm/fpm-app.conf
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-0-fpm/apc.ini
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-3-fpm/fpm-app.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-3-fpm/apc.ini
 sed -i "s/DOMAIN/$siteName/g" fpm-app.conf 
 mv fpm-app.conf /etc/php/7.0/fpm/pool.d/$siteName.conf
 mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.tmp
@@ -118,11 +118,11 @@ sed -i "s/DOMAIN/$siteName/g" varnish-logrotate.conf
 mv nginx-logrotate.conf /etc/logrotate.d/nginx
 mv varnish-logrotate.conf /etc/logrotate.d/varnish
 
-echo "/etc/init.d/php7.0-fpm restart" >> /etc/rc.local
+echo "/etc/init.d/php7.3-fpm restart" >> /etc/rc.local
 echo "/etc/init.d/nginx restart" >> /etc/rc.local
 echo "/etc/init.d/varnish restart" >> /etc/rc.local
 echo "varnishncsa -a -w /var/www/$siteName/logs/varnish-access.log -D -P /var/run/varnishncsa.pid" >> /etc/rc.local
-/etc/init.d/php7.0-fpm restart
+/etc/init.d/php7.3-fpm restart
 /etc/init.d/nginx restart
 /etc/init.d/varnish restart
 /etc/init.d/vsftpd restart
