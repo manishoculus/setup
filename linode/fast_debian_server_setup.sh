@@ -23,7 +23,7 @@ apt-get -y install php7.3 php7.3-fpm php-pear php7.3-common php7.3-mysql php7.3-
 apt-get -y install nginx
 #apt-get -y install redis-server
 export DEBIAN_FRONTEND=noninteractive
-apt-get -q -y install mysql-server mysql-client
+apt-get -q -y install mariadb-server mariadb-client
 apt-get -y install varnish
 apt-get -y install vsftpd
 
