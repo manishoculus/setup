@@ -50,8 +50,8 @@ mv default-sites-available.conf /etc/nginx/sites-available/default
 # ==============================================================
 # php7.4-fpm configuration
 # ==============================================================
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-3-fpm/fpm-app.conf
-wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-3-fpm/apc.ini
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-4-fpm/fpm-app.conf
+wget https://raw.githubusercontent.com/manishoculus/setup/master/linode/php-7-4-fpm/apc.ini
 sed -i "s/DOMAIN/$siteName/g" fpm-app.conf 
 mv fpm-app.conf /etc/php/7.4/fpm/pool.d/$siteName.conf
 mv /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.tmp
