@@ -1,5 +1,4 @@
 #!/bin/sh
-#var siteName;
 if [ -z "$1" ]; then siteName="testsite.com"; else siteName=$1; fi 
 if [ -z "$2" ]; then dbName="wordpress"; else dbName=$2; fi 
 if [ -z "$3" ]; then dbUser="admin"; else dbUser=$3; fi 
