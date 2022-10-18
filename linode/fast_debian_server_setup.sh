@@ -79,8 +79,6 @@ systemctl restart varnish.service
 # Wordpress Installation
 # ==============================================================
 # get latest wordpress version
-#mkdir -p /var/www/$siteName
-#cd /var/www/$siteName
 mkdir -p /var/www/$siteName/logs
 wget http://wordpress.org/latest.tar.gz
 tar -zxvf latest.tar.gz
